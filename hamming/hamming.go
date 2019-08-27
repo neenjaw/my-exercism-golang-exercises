@@ -12,18 +12,15 @@ func Distance(a, b string) (int, error) {
 		return 0, errors.New("strands must be of equal length")
 	}
 
-	return getDistance(a, b, 0), nil
-}
+	distance := 0
+	aRunes := []rune(a)
+	bRunes := []rune(b)
 
-// recursively compare the first character of the string, return once count complete
-func getDistance(a, b string, count int) int {
-	if a == "" {
-		return count
+	for i, v := range aRunes {
+		if v != bRunes[i] {
+			distance++
+		}
 	}
 
-	if a[:1] == b[:1] {
-		return getDistance(a[1:], b[1:], count)
-	}
-
-	return getDistance(a[1:], b[1:], count+1)
+	return distance, nil
 }
