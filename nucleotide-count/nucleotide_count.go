@@ -8,21 +8,13 @@ type Histogram struct {
 // DNA is a list of nucleotides.
 type DNA []rune
 
+// Init is a method of type Histogram to initialize the nucleotide counts
 func (h Histogram) Init() {
-	h.counts = make(map[rune]int, 4)
-
-	nucleotides := []struct {
-		name  rune
-		count int
-	}{
-		{'A', 0},
-		{'C', 0},
-		{'T', 0},
-		{'G', 0},
-	}
-
-	for i := range nucleotides {
-		h.counts[nucleotides[i].name] = nucleotides[i].count
+	h.counts = map[rune]int{
+		'A': 0,
+		'C': 0,
+		'T': 0,
+		'G': 0,
 	}
 }
 
