@@ -4,8 +4,7 @@ package raindrops, provides Convert, an exported function to convert an integer 
 package raindrops
 
 import (
-	"fmt"
-	"math"
+	"strconv"
 )
 
 // Convert - a function which takes a number and returns a string
@@ -26,13 +25,13 @@ func Convert(num int) string {
 	}
 
 	for i := range rainsounds {
-		if math.Remainder(float64(num), float64(rainsounds[i].factor)) == 0 {
+		if num%rainsounds[i].factor == 0 {
 			rain += rainsounds[i].sound
 		}
 	}
 
 	if rain == "" {
-		rain = fmt.Sprintf("%d", num)
+		rain = strconv.Itoa(num)
 	}
 
 	return rain
