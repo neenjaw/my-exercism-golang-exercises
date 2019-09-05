@@ -1,3 +1,7 @@
+/*
+Package dna contains functions related to computing metrics assodiated with dna strand
+represented with a rune slice.
+*/
 package dna
 
 import "errors"
