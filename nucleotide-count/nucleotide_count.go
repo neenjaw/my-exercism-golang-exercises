@@ -1,16 +1,16 @@
 package dna
 
+import "errors"
+
 // Histogram is a mapping from nucleotide to its count in given DNA.
-type Histogram struct {
-	counts map[rune]int
-}
+type Histogram map[rune]int
 
 // DNA is a list of nucleotides.
 type DNA []rune
 
 // Init is a method of type Histogram to initialize the nucleotide counts
-func (h Histogram) Init() {
-	h.counts = map[rune]int{
+func (h *Histogram) Init() {
+	*h = map[rune]int{
 		'A': 0,
 		'C': 0,
 		'T': 0,
@@ -28,5 +28,13 @@ func (d DNA) Counts() (Histogram, error) {
 	h := new(Histogram)
 	h.Init()
 
-	return *h, nil
+	for i := range d {
+		if _, ok := (*h)[d[i]]; ok {
+			(*h)[d[i]]++
+		} else {
+			return nil, errors.New("dna strand contains invalid nucleotide")
+		}
+	}
+
+	return (*h), nil
 }
