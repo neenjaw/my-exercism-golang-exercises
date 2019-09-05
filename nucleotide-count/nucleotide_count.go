@@ -8,9 +8,7 @@ type Histogram struct {
 // DNA is a list of nucleotides.
 type DNA []rune
 
-func NewHistogram() Histogram {
-	var h Histogram
-
+func (h Histogram) Init() {
 	h.counts = make(map[rune]int, 4)
 
 	nucleotides := []struct {
@@ -26,8 +24,6 @@ func NewHistogram() Histogram {
 	for i := range nucleotides {
 		h.counts[nucleotides[i].name] = nucleotides[i].count
 	}
-
-	return h
 }
 
 // Counts generates a histogram of valid nucleotides in the given DNA.
@@ -37,7 +33,8 @@ func NewHistogram() Histogram {
 // The receiver appears in its own argument list between the func keyword and the method name.
 // Here, the Counts method has a receiver of type DNA named d.
 func (d DNA) Counts() (Histogram, error) {
-	h := NewHistogram()
+	h := new(Histogram)
+	h.Init()
 
-	return h, nil
+	return *h, nil
 }
