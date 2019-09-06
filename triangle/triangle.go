@@ -9,15 +9,15 @@ import "math"
 // Kind - referring to the kind of triangle
 type Kind int
 
+// NaT - Not a triangle
+// Equ - An Equilateral triangle
+// Iso - An Isosceles triangle
+// Sca - A Scalene triangle
 const (
-	// NaT - Not a triangle
-	NaT = -1
-	// Equ - An Equilateral triangle
-	Equ = 3
-	// Iso - An Isosceles triangle
-	Iso = 2
-	// Sca - A Scalene triangle
-	Sca = 1
+	NaT Kind = iota
+	Equ
+	Iso
+	Sca
 )
 
 // KindFromSides takes 3 numbers and returns the Kind of a triangle is formed by the three sides
