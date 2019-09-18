@@ -30,31 +30,33 @@ import "unicode"
 
 // letterValues is a human readable anonymous struct to facilitate a
 // the creation of a mapping between the letters and the scores
-var letterValues = []struct {
-	score   int
-	letters string
-}{
-	{1, "AEIOULNRST"},
-	{2, "DG"},
-	{3, "BCMP"},
-	{4, "FHVWY"},
-	{5, "K"},
-	{8, "JX"},
-	{10, "QZ"},
-}
-
-// Do an ETL transform on the letterValues anonymous struct, and return
-// a mapping from letter to score.
-func makeLetterValues() map[rune]int {
-	m := make(map[rune]int)
-
-	for _, letterValue := range letterValues {
-		for _, letter := range letterValue.letters {
-			m[letter] = letterValue.score
-		}
-	}
-
-	return m
+var letterValues = map[rune]int{
+	'A': 1,
+	'E': 1,
+	'I': 1,
+	'O': 1,
+	'U': 1,
+	'L': 1,
+	'N': 1,
+	'R': 1,
+	'S': 1,
+	'T': 1,
+	'D': 2,
+	'G': 2,
+	'B': 3,
+	'C': 3,
+	'M': 3,
+	'P': 3,
+	'F': 4,
+	'H': 4,
+	'V': 4,
+	'W': 4,
+	'Y': 4,
+	'K': 5,
+	'J': 8,
+	'X': 8,
+	'Q': 10,
+	'Z': 10,
 }
 
 // Modifier is a type to specify if special scoring conditions should be applied
@@ -80,7 +82,6 @@ func Score(word string, mods ...ModifierParam) int {
 	letterMods := collectLetterModifiers(mods)
 	wordMods := collectWordModifiers(mods)
 
-	letterValues := makeLetterValues()
 	initalScoring := 0
 
 	for _, letter := range word {
