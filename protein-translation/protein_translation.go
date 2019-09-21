@@ -1,24 +1,19 @@
+/*
+Package protein contains functions to translate strings
+representing RNA into amino acids as part of protein
+transcription.
+*/
 package protein
 
-// ErrStop indicates a codon error.
-type ErrStop struct {
-	s string
-}
+import "fmt"
 
-func (e *ErrStop) Error() string {
-	return e.s
-}
+// ErrStop - reached end protein signal
+var ErrStop = fmt.Errorf("stop message encountered")
 
-// ErrInvalidBase indicates an invalid codon pattern
-type ErrInvalidBase struct {
-	s string
-}
+// ErrInvalidBase - Malformed codon
+var ErrInvalidBase = fmt.Errorf("malformed or bad codon encountered")
 
-func (e *ErrInvalidBase) Error() string {
-	return e.s
-}
-
-// intermediary type
+// intermediary type to match codons to amino acids
 type message int
 
 const (
@@ -28,10 +23,11 @@ const (
 	serine
 	tyrosine
 	tryptophan
+	cysteine
 	stop
 )
 
-var codonMessage = map[string]message{
+var codonToMessage = map[string]message{
 	"AUG": methionine,
 	"UUU": phenylalanine,
 	"UUC": phenylalanine,
@@ -58,37 +54,41 @@ var messageToString = map[message]string{
 	serine:        "Serine",
 	tyrosine:      "Tyrosine",
 	tryptophan:    "Tryptophan",
+	cysteine:      "Cysteine",
 }
 
+// FromCodon takes a string representing a codon and returns the aminoacid
 func FromCodon(codon string) (string, error) {
-	if m, ok := codonMessage[codon]; ok {
+	if m, ok := codonToMessage[codon]; ok {
 		if m == stop {
-			return "", &ErrStop{"stop encountered"}
+			return "", ErrStop
 		}
 
 		return messageToString[m], nil
 	}
 
-	return "", &ErrInvalidBase{"invalid sequence"}
+	return "", ErrInvalidBase
 }
 
+// FromRNA takes a string of RNA, returns the amino acids
 func FromRNA(rna string) ([]string, error) {
-	aminos := make([]string)
+	aminos := make([]string, 0)
+
+translationLoop:
 	for n := 0; n < len(rna); n += 3 {
-		if n+2 > len(rna) {
-			return "", &ErrInvalidBase{"incomplete trailing a codon"}
+		if n+3 > len(rna) {
+			return nil, ErrInvalidBase
 		}
 
-		if m, err := FromCodon(rna[n : n+2]); err != nil {
-			if _, ok := err.(*ErrStop); ok {
-				break
-			}
+		m, err := FromCodon(rna[n : n+3])
 
-			if _, ok := err.(*ErrInvalidBase); ok {
-				return "", &ErrInvalidBase{"invalid codon"}
-			}
-
-			aminos = append(aminos, messageToString[m])
+		switch err {
+		case ErrStop:
+			break translationLoop
+		case ErrInvalidBase:
+			return aminos, ErrInvalidBase
+		default:
+			aminos = append(aminos, m)
 		}
 	}
 
