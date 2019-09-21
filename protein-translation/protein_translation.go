@@ -5,13 +5,14 @@ transcription.
 */
 package protein
 
-import "fmt"
+import "errors"
 
-// ErrStop - reached end protein signal
-var ErrStop = fmt.Errorf("stop message encountered")
-
-// ErrInvalidBase - Malformed codon
-var ErrInvalidBase = fmt.Errorf("malformed or bad codon encountered")
+var (
+	// ErrStop - reached end protein signal
+	ErrStop error = errors.New("stop message encountered")
+	// ErrInvalidBase - Malformed codon
+	ErrInvalidBase error = errors.New("malformed or bad codon encountered")
+)
 
 // intermediary type to match codons to amino acids
 type message int
