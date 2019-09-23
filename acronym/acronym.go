@@ -1,10 +1,12 @@
-// Package acronym
+// Package acronym has functions to create acronyms
 package acronym
 
-import "strings"
-import "unicode"
+import (
+	"strings"
+	"unicode"
+)
 
-// Abbreviate should have a comment documenting it.
+// Abbreviate takes a string as input, returns an upcased abbreviation.
 func Abbreviate(s string) string {
 	var abbr strings.Builder
 
