@@ -12,9 +12,8 @@ func IsIsogram(s string) bool {
 		}
 
 		lowered := unicode.ToLower(r)
-		usedBefore := lettersUsed[lowered]
 
-		if usedBefore {
+		if lettersUsed[lowered] {
 			return false
 		}
 
