@@ -1,1 +1,4 @@
-exercism download --exercise=scale-generator --track=go
+exercism download --exercise=anagram --track=go
+exercism download --exercise=word-count --track=go
+exercism download --exercise=run-length-encoding --track=go
+exercism download --exercise=difference-of-squares --track=go
