@@ -1,2 +1,1 @@
-exercism download --exercise=word-count --track=go
 exercism download --exercise=difference-of-squares --track=go
