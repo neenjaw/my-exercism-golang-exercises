@@ -37,11 +37,5 @@ func Valid(input string) bool {
 		doubleDigit = !doubleDigit
 	}
 
-	// If the luhn number is too short
-	if digitCount < 2 {
-		return false
-	}
-
-	// If it's a valid luhn number
-	return luhnSum%10 == 0
+	return digitCount > 1 && luhnSum%10 == 0
 }
