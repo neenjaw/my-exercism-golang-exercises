@@ -11,23 +11,23 @@ import "strings"
 func Valid(input string) bool {
 	input = strings.ReplaceAll(input, " ", "")
 	digitCount := 0
-	doubleDigit := false
 	luhnSum := 0
+	// Use the length  to determine whether or not to double the first digit
+	doubleDigit := len(input)%2 == 0
 
 	// Loop through input in reverse:
-	for i := len(input) - 1; i >= 0; i-- {
-		r := input[i]
+	for _, r := range input {
+		digit := int(r - '0')
 
 		// encountered an illegal character
-		if r < '0' || '9' < r {
+		if digit < 0 || digit > 9 {
 			return false
 		}
-
-		digit := int(r - '0')
 
 		if doubleDigit {
 			digit *= 2
 		}
+
 		if digit > 9 {
 			digit -= 9
 		}
