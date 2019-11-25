@@ -12,10 +12,9 @@ func Valid(input string) bool {
 	input = strings.ReplaceAll(input, " ", "")
 	digitCount := 0
 	luhnSum := 0
-	// Use the length  to determine whether or not to double the first digit
+	// Use the length to determine whether or not to double the first digit
 	doubleDigit := len(input)%2 == 0
 
-	// Loop through input in reverse:
 	for _, r := range input {
 		digit := int(r - '0')
 
