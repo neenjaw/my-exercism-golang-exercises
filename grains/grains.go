@@ -27,13 +27,5 @@ func Square(n int) (uint64, error) {
 // Total returns the sum, starting with 1, then the result of 1 shifted left on
 // each iteration
 func Total() uint64 {
-	var total uint64
-
-	for i, square := 0, 1; i < 64; i++ {
-		total += uint64(square)
-
-		square <<= 1
-	}
-
-	return total
+	return 1<<64 - 1
 }
