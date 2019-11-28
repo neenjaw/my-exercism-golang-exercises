@@ -11,8 +11,7 @@ type Clock struct {
 
 // New returns a new clock with the specified hours and minutes normalized to a 24-hr clock.
 func New(hh int, mm int) Clock {
-	newClock := Clock{hour: 0, minute: 0}
-	minutes := hh*60 + mm
+	newClock, minutes := Clock{hour: 0, minute: 0}, hh*60+mm
 
 	(&newClock).makeClock(minutes)
 
@@ -22,8 +21,7 @@ func New(hh int, mm int) Clock {
 func (c *Clock) makeClock(minutes int) {
 	rawMinutes := c.minute + minutes
 
-	minute := rawMinutes % 60
-	hourAdjust := 0
+	minute, hourAdjust := rawMinutes%60, 0
 	if minute < 0 {
 		minute += 60
 		hourAdjust--
@@ -39,7 +37,6 @@ func (c *Clock) makeClock(minutes int) {
 
 // Add uses a positive integer representing minutes to be added to the clock
 func (c Clock) Add(mm int) Clock {
-
 	newClock := Clock{hour: c.hour, minute: c.minute}
 
 	(&newClock).makeClock(mm)
