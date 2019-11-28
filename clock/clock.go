@@ -14,29 +14,13 @@ func New(hh int, mm int) Clock {
 	newClock := Clock{hour: 0, minute: 0}
 	minutes := hh*60 + mm
 
-	if minutes == 0 {
-		return newClock
-	}
+	(&newClock).makeClock(minutes)
 
-	if minutes < 0 {
-		return newClock.Subtract(minutes * -1)
-	}
-
-	return newClock.Add(minutes)
+	return newClock
 }
 
-// Add uses a positive integer representing minutes to be added to the clock
-func (c Clock) Add(mm int) Clock {
-	rawMinutes := c.minute + mm
-	minute := rawMinutes % 60
-	hour := (c.hour + rawMinutes/60) % 24
-
-	return Clock{hour: hour, minute: minute}
-}
-
-// Subtract uses a positive integer representing minutes to subtract from the clock.
-func (c Clock) Subtract(mm int) Clock {
-	rawMinutes := c.minute - mm
+func (c *Clock) makeClock(minutes int) {
+	rawMinutes := c.minute + minutes
 
 	minute := rawMinutes % 60
 	hourAdjust := 0
@@ -50,7 +34,26 @@ func (c Clock) Subtract(mm int) Clock {
 		hour += 24
 	}
 
-	return Clock{hour: hour, minute: minute}
+	c.hour, c.minute = hour, minute
+}
+
+// Add uses a positive integer representing minutes to be added to the clock
+func (c Clock) Add(mm int) Clock {
+
+	newClock := Clock{hour: c.hour, minute: c.minute}
+
+	(&newClock).makeClock(mm)
+
+	return newClock
+}
+
+// Subtract uses a positive integer representing minutes to subtract from the clock.
+func (c Clock) Subtract(mm int) Clock {
+	newClock := Clock{hour: c.hour, minute: c.minute}
+
+	(&newClock).makeClock(mm * -1)
+
+	return newClock
 }
 
 // String returns a string representation of the Clock struct type, formatted in the hh:mm format
