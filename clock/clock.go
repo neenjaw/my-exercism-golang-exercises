@@ -8,13 +8,13 @@ type Clock struct {
 	minute int
 }
 
-const minutesPerCycle int = 60 * 24
+const day int = 60 * 24
 
 // New returns a new clock with the specified hours and minutes normalized to a 24-hr clock.
 func New(hh int, mm int) Clock {
-	minute := (hh*60 + mm) % minutesPerCycle
+	minute := (hh*60 + mm) % day
 	if minute < 0 {
-		minute += minutesPerCycle
+		minute += day
 	}
 
 	return Clock{minute: minute}
