@@ -23,11 +23,9 @@ func ConcurrentFrequency(strs []string) FreqMap {
 		}(s)
 	}
 
-	var totalFreq FreqMap
-	totalFreq = FreqMap{}
+	totalFreq := FreqMap{}
 	for range strs {
-		freq := <-ch
-		for k, v := range freq {
+		for k, v := range <-ch {
 			totalFreq[k] += v
 		}
 	}
