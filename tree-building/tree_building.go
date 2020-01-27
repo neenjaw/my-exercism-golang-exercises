@@ -3,15 +3,6 @@ package tree
 import "sort"
 import "errors"
 
-const (
-	errorRootNodeNotFound           string = "no root node"
-	errorRootNodeHasParent          string = "root cannot have parent"
-	errorRecordIDLessThanParent     string = "record id must be greater than parent id"
-	errorRecordIDNotUnique          string = "record id's must be unique"
-	errorRecordsIDsMustBeContinuous string = "ids must be zero-indexed and continuous"
-	errorTreeHasCycle               string = "id cycle detected"
-)
-
 // Record represents a post in the web forum
 type Record struct {
 	ID     int
@@ -31,37 +22,26 @@ func Build(records []Record) (*Node, error) {
 		return nil, nil
 	}
 
-	inserted := make([]bool, len(records))
-	nodes := make([]Node, len(records))
+	inserted, nodes := make([]bool, len(records)), make([]Node, len(records))
 	for _, record := range records {
-		// check for errors
-		if record.ID == 0 && record.Parent != 0 {
-			return nil, errors.New(errorRootNodeHasParent)
-		}
-		if record.ID != 0 && record.ID <= record.Parent {
-			return nil, errors.New(errorRecordIDLessThanParent)
-		}
-		if record.ID >= len(records) {
-			return nil, errors.New(errorRecordsIDsMustBeContinuous)
+		rootError := record.ID == 0 && record.Parent != 0
+		idError := record.ID != 0 && record.ID <= record.Parent
+		continuityError := record.ID >= len(records)
+		if rootError || idError || continuityError {
+			return nil, errors.New("record error")
 		}
 		if inserted[record.ID] {
-			return nil, errors.New(errorRecordIDNotUnique)
+			return nil, errors.New("duplicate record error")
 		}
-
-		// record is valid, create a node
-		nodes[record.ID].ID = record.ID
-		inserted[record.ID] = true
-
+		nodes[record.ID].ID, inserted[record.ID] = record.ID, true
 		if record.ID != 0 {
 			nodes[record.Parent].Children = append(nodes[record.Parent].Children, &nodes[record.ID])
 		}
 	}
-
 	for _, node := range nodes {
 		sort.Slice(node.Children, func(i, j int) bool {
 			return node.Children[i].ID < node.Children[j].ID
 		})
 	}
-
 	return &nodes[0], nil
 }
