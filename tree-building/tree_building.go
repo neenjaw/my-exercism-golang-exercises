@@ -17,13 +17,10 @@ type Node struct {
 
 // Build function receives a slice of Record structs
 func Build(records []Record) (*Node, error) {
-	if len(records) == 0 {
-		return nil, nil
-	}
 	sort.Slice(records, func(i, j int) bool {
 		return records[i].ID < records[j].ID
 	})
-	inserted, nodes := make([]bool, len(records)), make([]*Node, len(records))
+	inserted, nodes := make([]bool, len(records)), make(map[int]*Node, len(records))
 	for i, record := range records {
 		rootError := record.ID == 0 && record.Parent != 0
 		idError := record.ID != 0 && record.ID <= record.Parent
