@@ -20,7 +20,7 @@ func Build(records []Record) (*Node, error) {
 	sort.Slice(records, func(i, j int) bool {
 		return records[i].ID < records[j].ID
 	})
-	inserted, nodes := make([]bool, len(records)), make(map[int]*Node, len(records))
+	nodes := make(map[int]*Node, len(records))
 	for i, record := range records {
 		rootError := record.ID == 0 && record.Parent != 0
 		idError := record.ID != 0 && record.ID <= record.Parent
@@ -28,15 +28,10 @@ func Build(records []Record) (*Node, error) {
 		if rootError || idError || continuityError {
 			return nil, errors.New("record error")
 		}
-		nodes[i], inserted[record.ID] = &Node{ID: i}, true
+		nodes[i] = &Node{ID: i}
 		if record.ID != 0 {
 			nodes[record.Parent].Children = append(nodes[record.Parent].Children, nodes[i])
 		}
-	}
-	for _, node := range nodes {
-		sort.Slice(node.Children, func(i, j int) bool {
-			return node.Children[i].ID < node.Children[j].ID
-		})
 	}
 	return nodes[0], nil
 }
