@@ -21,8 +21,7 @@ var nameRegistry registry
 // Build the list of all robot names
 func init() {
 	nameRegistry = registry{
-		availableNames: make([]string, 0, maximumNames),
-		takenNames:     make(map[string]bool, maximumNames)}
+		availableNames: make([]string, 0, maximumNames)}
 
 	var sb strings.Builder
 	for _, l1 := range alpha {
