@@ -21,16 +21,13 @@ func Build(records []Record) (*Node, error) {
 		return records[i].ID < records[j].ID
 	})
 	nodes := make(map[int]*Node, len(records))
-	for i, record := range records {
-		rootError := record.ID == 0 && record.Parent != 0
-		idError := record.ID != 0 && record.ID <= record.Parent
-		continuityError := record.ID != i
-		if rootError || idError || continuityError {
+	for i, r := range records {
+		if r.ID != i || r.Parent > r.ID || r.ID > 0 && r.Parent == r.ID {
 			return nil, errors.New("record error")
 		}
 		nodes[i] = &Node{ID: i}
-		if record.ID != 0 {
-			nodes[record.Parent].Children = append(nodes[record.Parent].Children, nodes[i])
+		if r.ID != 0 {
+			nodes[r.Parent].Children = append(nodes[r.Parent].Children, nodes[i])
 		}
 	}
 	return nodes[0], nil
