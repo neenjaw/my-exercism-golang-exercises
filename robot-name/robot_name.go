@@ -6,31 +6,35 @@ import (
 	"time"
 )
 
-const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-const number = "1234567890"
-
 // Robot struct represents a robot with a name
 type Robot struct {
-	name *string
+	name string
 }
 
+var usedNames map[string]bool
+
 func init() {
+	usedNames = make(map[string]bool, 26*26*10*10*10)
 	rand.Seed(time.Now().UTC().UnixNano())
 }
 
 // Name returns the robot's name
 func (r *Robot) Name() (string, error) {
-	if r.name == nil {
-		name := makeName()
-		r.name = &name
+	for r.name == "" {
+		r.name = makeName()
+		if _, used := usedNames[r.name]; used {
+			r.name = ""
+		} else {
+			usedNames[r.name] = true
+		}
 	}
 
-	return *(r.name), nil
+	return r.name, nil
 }
 
 // Reset resets the robot's name
 func (r *Robot) Reset() {
-	r.name = nil
+	r.name = ""
 }
 
 func makeName() (name string) {
