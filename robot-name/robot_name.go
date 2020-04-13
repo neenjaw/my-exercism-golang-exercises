@@ -1,6 +1,7 @@
 package robotname
 
 import (
+	"errors"
 	"fmt"
 	"math/rand"
 	"time"
@@ -12,21 +13,25 @@ type Robot struct {
 }
 
 var usedNames map[string]bool
+var maximumNames int = 26 * 26 * 10 * 10 * 10
 
 func init() {
-	usedNames = make(map[string]bool, 26*26*10*10*10)
+	usedNames = make(map[string]bool)
 	rand.Seed(time.Now().UTC().UnixNano())
 }
 
 // Name returns the robot's name
 func (r *Robot) Name() (string, error) {
-	for r.name == "" {
+	if len(usedNames) == maximumNames {
+		return "", errors.New("No more names")
+	}
+
+	if r.name == "" {
 		r.name = makeName()
-		if _, used := usedNames[r.name]; used {
-			r.name = ""
-		} else {
-			usedNames[r.name] = true
+		for usedNames[r.name] {
+			r.name = makeName()
 		}
+		usedNames[r.name] = true
 	}
 
 	return r.name, nil
