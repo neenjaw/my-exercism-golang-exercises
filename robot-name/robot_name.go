@@ -26,13 +26,15 @@ func (r *Robot) Name() (string, error) {
 		return "", errors.New("No more names")
 	}
 
-	if r.name == "" {
-		r.name = makeName()
-		for usedNames[r.name] {
-			r.name = makeName()
-		}
-		usedNames[r.name] = true
+	if r.name != "" {
+		return r.name, nil
 	}
+
+	r.name = makeName()
+	for usedNames[r.name] {
+		r.name = makeName()
+	}
+	usedNames[r.name] = true
 
 	return r.name, nil
 }
